@@ -1,4 +1,4 @@
-# 🏦 dukascript (Go)
+# 🏦 dukascopy (Go)
 
 Download and stream historical price data for a variety of financial instruments (e.g., Forex, Commodities, and Indices) from Dukascopy Bank SA, including support for tick-level and aggregated intervals.
 
@@ -7,7 +7,7 @@ Download and stream historical price data for a variety of financial instruments
 ## 📦 Installation
 
 ```bash
-go get github.com/Eghosa-Osayande/dukascript/go/dukascript
+go get github.com/Eghosa-Osayande/dukascopy-go
 ```
 
 ---
@@ -20,7 +20,7 @@ go get github.com/Eghosa-Osayande/dukascript/go/dukascript
 import (
 	"context"
 	"time"
-	"github.com/Eghosa-Osayande/dukascript/go/dukascript"
+	"github.com/Eghosa-Osayande/dukascopy-go"
 )
 ```
 
@@ -59,14 +59,14 @@ Both `Fetch` and `LiveFetch` share similar parameters:
 ### When interval or time_unit is based on ticks:
 
 ```go
-Interval: dukascript.INTERVAL_TICK
+Interval: dukascopy.INTERVAL_TICK
 ```
 
 or
 
 ```go
 IntervalValue: 1
-TimeUnit: dukascript.TIME_UNIT_TICK
+TimeUnit: dukascopy.TIME_UNIT_TICK
 ```
 
 | Column      | Description              |
@@ -83,7 +83,7 @@ e.g., 5-minute OHLC candle data:
 
 ```go
 IntervalValue: 5
-TimeUnit: dukascript.TIME_UNIT_MIN
+TimeUnit: dukascopy.TIME_UNIT_MIN
 ```
 
 | Column      | Description              |
@@ -122,12 +122,12 @@ ctx := context.Background()
 start, _ := time.Parse(time.DateOnly, "2025-04-21")
 end := start.Add(24 * time.Hour)
 
-df := dukascript.Fetch(ctx, dukascript.FetchArgs{
-	Instrument: dukascript.INSTRUMENT_FX_MAJORS_AUD_USD,
-	OfferSide:  dukascript.OFFER_SIDE_BID,
+df := dukascopy.Fetch(ctx, dukascopy.FetchArgs{
+	Instrument: dukascopy.INSTRUMENT_FX_MAJORS_AUD_USD,
+	OfferSide:  dukascopy.OFFER_SIDE_BID,
 	Start:      start,
 	End:        &end,
-	Interval:   dukascript.INTERVAL_TICK,
+	Interval:   dukascopy.INTERVAL_TICK,
 })
 
 file, _ := os.Create("out.csv")
@@ -142,16 +142,16 @@ ctx := context.Background()
 start, _ := time.Parse(time.DateOnly, "2025-04-21")
 end := start.Add(24 * time.Hour)
 
-dfChan := dukascript.LiveFetch(ctx, dukascript.LiveFetchArgs{
-	Instrument:    dukascript.INSTRUMENT_FX_MAJORS_AUD_USD,
-	OfferSide:     dukascript.OFFER_SIDE_BID,
+dfChan := dukascopy.LiveFetch(ctx, dukascopy.LiveFetchArgs{
+	Instrument:    dukascopy.INSTRUMENT_FX_MAJORS_AUD_USD,
+	OfferSide:     dukascopy.OFFER_SIDE_BID,
 	Start:         start,
 	End:           &end,
 	IntervalValue: 1,
-	TimeUnit:      dukascript.TIME_UNIT_HOUR,
+	TimeUnit:      dukascopy.TIME_UNIT_HOUR,
 })
 
-var df dukascript.Dataframe
+var df dukascopy.Dataframe
 for df = range dfChan {
 }
 
@@ -167,15 +167,15 @@ ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 defer cancel()
 start, _ := time.Parse(time.DateOnly, "2025-04-21")
 
-var df dukascript.Dataframe
+var df dukascopy.Dataframe
 
-dfChan := dukascript.LiveFetch(ctx, dukascript.LiveFetchArgs{
-	Instrument:    dukascript.INSTRUMENT_FX_MAJORS_AUD_USD,
-	OfferSide:     dukascript.OFFER_SIDE_BID,
+dfChan := dukascopy.LiveFetch(ctx, dukascopy.LiveFetchArgs{
+	Instrument:    dukascopy.INSTRUMENT_FX_MAJORS_AUD_USD,
+	OfferSide:     dukascopy.OFFER_SIDE_BID,
 	Start:         start,
 	End:           nil,
 	IntervalValue: 1,
-	TimeUnit:      dukascript.TIME_UNIT_HOUR,
+	TimeUnit:      dukascopy.TIME_UNIT_HOUR,
 })
 
 file, _ := os.Create("out2.json")
